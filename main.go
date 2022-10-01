@@ -14,13 +14,45 @@ const HTML = `
 <html>
   <head>
     <title>Yonkers Trash Schedule</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <style>
+       body {
+           font-family: helvetica, sans-serif;
+           font-size: 4vw;
+           background-color: #d8fbee;
+           display: flex;
+           flex-direction: row;
+           align-content: center;
+           justify-content: center;
+           align-items: center;
+       }
+       table {
+           text-align: center;
+           border-collapse: collapse;
+       }
+       td {
+           padding: 5px;
+           border: 2px;
+       }
+       table td + td {
+           border-left: 2px solid black;
+       }
+       caption {
+         caption-side: bottom;
+         padding: 10px;
+       }
+    </style>
   </head>
   <body>
-  {{range .TrashDates}}
-    <div>
-      {{.Date}} - {{.Pickup}}
-    </div>
-  {{end}}
+    <table>
+      <caption><a href="https://www.yonkersny.gov/home/showpublisheddocument/30455/637743931515170000">Schedule PDF</a></caption>
+      <thead><tr><th>Date</th><th>Pickup</th></tr></thead>
+      <tbody>
+        {{range .TrashDates}}
+          <tr><td>{{.Date}}</td><td>{{.Pickup}}</td></tr>
+        {{end}}
+      </tbody>
+    </table>
   </body>
 </html>
 `
