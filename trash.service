@@ -1,0 +1,14 @@
+# Use systemd to keep logging alive and autostart on boot.
+# There is a symlink to this file living in ~/.config/systemd/user/trash.service
+
+[Unit]
+Description=HTTP server that hosts a website with the yonkers trash schedule.
+Documentation=https://github.com/sbadame/trash/
+
+[Service]
+Type=simple
+ExecStart=/home/sandro/apps/trash/trash
+Restart=always
+
+[Install]
+WantedBy=default.target
