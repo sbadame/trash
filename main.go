@@ -26,6 +26,9 @@ const HTML = `
            justify-content: center;
            align-items: center;
        }
+       .nopickup {
+          color: #a8c7bb;
+       }
        table {
            text-align: center;
            border-collapse: collapse;
@@ -49,7 +52,7 @@ const HTML = `
       <thead><tr><th>Date</th><th>Pickup</th></tr></thead>
       <tbody>
         {{range .TrashDates}}
-          <tr><td>{{.Date}}</td><td>{{.Pickup}}</td></tr>
+          <tr><td>{{.Date}}</td><td{{.PickupClass}}>{{.Pickup}}</td></tr>
         {{end}}
       </tbody>
     </table>
@@ -60,13 +63,25 @@ const HTML = `
 type PickupDate struct {
 	Date   string
 	Pickup Pickup
+	PickupClass template.HTMLAttr
 }
 
 func nextWeekOfDays(startDate time.Time) []PickupDate {
 	var r []PickupDate
 	for i := 0; i < 7; i++ {
 		d := startDate.AddDate(0, 0, i)
-		r = append(r, PickupDate{d.Format("Mon 01/02"), ForDate(d)})
+		p := ForDate(d)
+
+		class := ""
+		if p == NO_PICKUP || p == NO_PICKUP_HOLIDAY {
+			class = " class=\"nopickup\""
+		}
+
+		r = append(r, PickupDate{
+			d.Format("Mon 01/02"),
+			p,
+			template.HTMLAttr(class),
+		})
 	}
 	return r
 }
