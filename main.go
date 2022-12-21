@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"time"
+	"github.com/sbadame/trash/pkg/trash"
 )
 
 const HTML = `
@@ -48,7 +49,8 @@ const HTML = `
   </head>
   <body>
     <table>
-      <caption><a href="https://www.yonkersny.gov/home/showpublisheddocument/30455/637743931515170000">Schedule PDF</a></caption>
+      <caption><a href="https://www.yonkersny.gov/home/showpublisheddocument/30455/637743931515170000">Schedule PDF 2022</a></caption>
+      <caption><a href="https://www.yonkersny.gov/home/showpublisheddocument/34550/638055868288430000">Schedule PDF 2023</a></caption>
       <thead><tr><th>Date</th><th>Pickup</th></tr></thead>
       <tbody>
         {{range .TrashDates}}
@@ -62,7 +64,7 @@ const HTML = `
 
 type PickupDate struct {
 	Date   string
-	Pickup Pickup
+	Pickup trash.Pickup
 	PickupClass template.HTMLAttr
 }
 
@@ -70,10 +72,10 @@ func nextWeekOfDays(startDate time.Time) []PickupDate {
 	var r []PickupDate
 	for i := 0; i < 7; i++ {
 		d := startDate.AddDate(0, 0, i)
-		p := ForDate(d)
+		p := trash.ForDate(d)
 
 		class := ""
-		if p == NO_PICKUP || p == NO_PICKUP_HOLIDAY {
+		if p == trash.NO_PICKUP || p == trash.NO_PICKUP_HOLIDAY {
 			class = " class=\"nopickup\""
 		}
 
@@ -115,7 +117,6 @@ func main() {
 		port = "8090"
 	}
 	fmt.Printf("Serving on :%s\n", port)
-	http.HandleFunc("/trash", TrashVoice)
 	http.HandleFunc("/", TrashHTML)
 	http.ListenAndServe(":"+port, nil)
 }
