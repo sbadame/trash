@@ -49,7 +49,6 @@ const HTML = `
   </head>
   <body>
     <table>
-      <caption><a href="https://www.yonkersny.gov/home/showpublisheddocument/30455/637743931515170000">Schedule PDF 2022</a></caption>
       <caption><a href="https://www.yonkersny.gov/home/showpublisheddocument/34550/638055868288430000">Schedule PDF 2023</a></caption>
       <thead><tr><th>Date</th><th>Pickup</th></tr></thead>
       <tbody>
