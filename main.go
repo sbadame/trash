@@ -2,12 +2,12 @@ package main
 
 import (
 	"fmt"
+	"github.com/sbadame/trash/pkg/trash"
 	"html/template"
 	"io"
 	"net/http"
 	"os"
 	"time"
-	"github.com/sbadame/trash/pkg/trash"
 )
 
 const HTML = `
@@ -49,7 +49,8 @@ const HTML = `
   </head>
   <body>
     <table>
-      <caption><a href="https://www.yonkersny.gov/home/showpublisheddocument/34550/638055868288430000">Schedule PDF 2023</a></caption>
+      <!-- <caption><a href="https://www.yonkersny.gov/home/showpublisheddocument/34550/638055868288430000">Schedule PDF 2023</a></caption> -->
+      <caption><a href="">Waiting for the new PDF...</a></caption>
       <thead><tr><th>Date</th><th>Pickup</th></tr></thead>
       <tbody>
         {{range .TrashDates}}
@@ -62,8 +63,8 @@ const HTML = `
 `
 
 type PickupDate struct {
-	Date   string
-	Pickup trash.Pickup
+	Date        string
+	Pickup      trash.Pickup
 	PickupClass template.HTMLAttr
 }
 
