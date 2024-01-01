@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"flag"
 	"fmt"
 	"github.com/sbadame/trash/pkg/trash"
 	"html/template"
@@ -9,6 +10,12 @@ import (
 	"os"
 	"time"
 )
+
+var accessControlAllowOrigin string
+
+func init() {
+	flag.StringVar(&accessControlAllowOrigin, "access-control-allow-origin", "", "When set will add the Access-Control-Allow-Origin header to requests with the value provided.")
+}
 
 const HTML = `
 <!DOCTYPE html>
@@ -99,6 +106,11 @@ func TrashHTML(w http.ResponseWriter, req *http.Request) {
 	}{
 		nextWeekOfDays(time.Now()),
 	}
+
+	if accessControlAllowOrigin != "" {
+		w.Header().Set("Access-Control-Allow-Origin", accessControlAllowOrigin)
+	}
+
 	err = tmpl.Execute(w, data)
 	if err != nil {
 		http.Error(w, "Internal Error executing the HTML template: "+err.Error(), http.StatusInternalServerError)
@@ -127,10 +139,15 @@ func TrashJSON(w http.ResponseWriter, req *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
+	if accessControlAllowOrigin != "" {
+		w.Header().Set("Access-Control-Allow-Origin", accessControlAllowOrigin)
+	}
 	w.Write(j)
 }
 
 func main() {
+	flag.Parse()
+
 	// https://cloud.google.com/run/docs/reference/container-contract#port
 	port := os.Getenv("PORT")
 	if port == "" {
