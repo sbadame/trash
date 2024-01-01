@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/sbadame/trash/pkg/trash"
 	"html/template"
@@ -105,6 +106,30 @@ func TrashHTML(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
+func TrashJSON(w http.ResponseWriter, req *http.Request) {
+	startDate := time.Now()
+
+	pickups := make(map[int64]string) // milliseconds from unix epoch --> pickup string
+	for i := 0; i < 7; i++ {
+		d := startDate.AddDate(0, 0, i)
+		pickups[d.Unix()*1000] = trash.ForDate(d).String()
+	}
+
+	payload := struct {
+		Dates map[int64]string `json:"dates"`
+	}{
+		pickups,
+	}
+	j, err := json.Marshal(payload)
+	if err != nil {
+		http.Error(w, "Internal Error converting data to json: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(j)
+}
+
 func main() {
 	// https://cloud.google.com/run/docs/reference/container-contract#port
 	port := os.Getenv("PORT")
@@ -113,5 +138,6 @@ func main() {
 	}
 	fmt.Printf("Serving on :%s\n", port)
 	http.HandleFunc("/", TrashHTML)
+	http.HandleFunc("/index.json", TrashJSON)
 	http.ListenAndServe(":"+port, nil)
 }
