@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/sbadame/trash/pkg/trash"
 	"html/template"
-	"io"
 	"net/http"
 	"os"
 	"time"
@@ -49,8 +48,7 @@ const HTML = `
   </head>
   <body>
     <table>
-      <!-- <caption><a href="https://www.yonkersny.gov/home/showpublisheddocument/34550/638055868288430000">Schedule PDF 2023</a></caption> -->
-      <caption><a href="">Waiting for the new PDF...</a></caption>
+      <caption><a href="https://www.yonkersny.gov/home/showpublisheddocument/40528/638388338236630000">Schedule PDF 2024</a></caption>
       <thead><tr><th>Date</th><th>Pickup</th></tr></thead>
       <tbody>
         {{range .TrashDates}}
@@ -88,25 +86,22 @@ func nextWeekOfDays(startDate time.Time) []PickupDate {
 	return r
 }
 
-func writeHtmlForTime(out io.Writer, t time.Time) error {
+func TrashHTML(w http.ResponseWriter, req *http.Request) {
 	tmpl, err := template.New("page").Parse(HTML)
 	if err != nil {
-		return err
+		http.Error(w, "Internal Error parsing the HTML template: "+err.Error(), http.StatusInternalServerError)
+		return
 	}
 
 	data := struct {
 		TrashDates []PickupDate
 	}{
-		nextWeekOfDays(t),
+		nextWeekOfDays(time.Now()),
 	}
-	return tmpl.Execute(out, data)
-}
-
-func TrashHTML(w http.ResponseWriter, req *http.Request) {
-	err := writeHtmlForTime(w, time.Now())
+	err = tmpl.Execute(w, data)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintf(w, "Internal error: %v", err)
+		http.Error(w, "Internal Error executing the HTML template: "+err.Error(), http.StatusInternalServerError)
+		return
 	}
 }
 
