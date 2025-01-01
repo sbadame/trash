@@ -14,12 +14,12 @@ func TestForDate(t *testing.T) {
 		time time.Time
 		want Pickup
 	}{
-		{time: time.Date(2022, time.May, 25, 0, 0, 0, 0, loc), want: PAPER},
-		{time: time.Date(2022, time.May, 30, 0, 0, 0, 0, loc), want: NO_PICKUP_HOLIDAY},
-		{time: time.Date(2022, time.June, 3, 0, 0, 0, 0, loc), want: TRASH},
-		{time: time.Date(2022, time.June, 13, 0, 0, 0, 0, loc), want: TRASH},
-		{time: time.Date(2022, time.June, 15, 0, 0, 0, 0, loc), want: COMMINGLES},
-		{time: time.Date(2022, time.June, 15, 1, 1, 1, 1, loc), want: COMMINGLES},
+		{time: time.Date(2025, time.May, 26, 0, 0, 0, 0, loc), want: NO_PICKUP_HOLIDAY},
+		{time: time.Date(2025, time.May, 27, 0, 0, 0, 0, loc), want: TRASH},
+		{time: time.Date(2025, time.June, 4, 0, 0, 0, 0, loc), want: PAPER},
+		{time: time.Date(2025, time.June, 11, 0, 0, 0, 0, loc), want: COMMINGLES},
+		{time: time.Date(2025, time.June, 16, 0, 0, 0, 0, loc), want: TRASH},
+		{time: time.Date(2025, time.June, 12, 1, 1, 1, 1, loc), want: TRASH},
 	}
 
 	for _, tc := range tests {
@@ -42,9 +42,9 @@ func TestNextPickup(t *testing.T) {
 		wantErr error
 	}{
 		{
-			from:    time.Date(2022, time.May, 27, 0, 0, 0, 0, loc),
+			from:    time.Date(2025, time.May, 25, 0, 0, 0, 0, loc),
 			pickup:  TRASH,
-			want:    time.Date(2022, time.May, 31, 0, 0, 0, 0, loc),
+			want:    time.Date(2025, time.May, 27, 0, 0, 0, 0, loc),
 			wantErr: nil,
 		},
 	}
