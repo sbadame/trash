@@ -56,7 +56,7 @@ const HTML = `
   </head>
   <body>
     <table>
-      <caption><a href="https://www.yonkersny.gov/home/showpublisheddocument/40528/638388338236630000">Schedule PDF 2024</a></caption>
+      <caption><a href="https://www.yonkersny.gov/DocumentCenter/View/13446">Schedule PDF 2025</a></caption>
       <thead><tr><th>Date</th><th>Pickup</th></tr></thead>
       <tbody>
         {{range .TrashDates}}
