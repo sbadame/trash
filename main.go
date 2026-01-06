@@ -18,8 +18,8 @@ func init() {
 	flag.StringVar(&accessControlAllowOrigin, "access-control-allow-origin", "", "When set will add the Access-Control-Allow-Origin header to requests with the value provided.")
 }
 
-//go:embed static/schedule_2025.pdf
-var schedule_2025_pdf []byte
+//go:embed static/schedule_2026.pdf
+var schedule_2026_pdf []byte
 
 const HTML = `
 <!DOCTYPE html>
@@ -60,7 +60,7 @@ const HTML = `
   </head>
   <body>
     <table>
-      <caption><a href="/schedule_2025.pdf">Schedule PDF 2025</a></caption>
+      <caption><a href="/schedule_2026.pdf">Schedule PDF 2026</a></caption>
       <thead><tr><th>Date</th><th>Pickup</th></tr></thead>
       <tbody>
         {{range .TrashDates}}
@@ -149,8 +149,8 @@ func TrashJSON(w http.ResponseWriter, req *http.Request) {
 	w.Write(j)
 }
 
-func DownloadSchedule2025(w http.ResponseWriter, req *http.Request) {
-	if _, err := w.Write(schedule_2025_pdf); err != nil {
+func DownloadSchedule2026(w http.ResponseWriter, req *http.Request) {
+	if _, err := w.Write(schedule_2026_pdf); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		fmt.Fprintf(w, "Internal Error: "+err.Error())
 	}
@@ -167,6 +167,6 @@ func main() {
 	fmt.Printf("Serving on :%s\n", port)
 	http.HandleFunc("/", TrashHTML)
 	http.HandleFunc("/index.json", TrashJSON)
-	http.HandleFunc("/schedule_2025.pdf", DownloadSchedule2025)
+	http.HandleFunc("/schedule_2026.pdf", DownloadSchedule2026)
 	http.ListenAndServe(":"+port, nil)
 }
